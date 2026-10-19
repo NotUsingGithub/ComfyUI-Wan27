@@ -6,7 +6,7 @@ Official guide: https://docs.comfy.org/registry/publishing
 
 GitHub source and 0.1.0 release are public. Manager catalog PR #3394 is merged and the Wan27 entry was verified in main. This does not establish a published Registry version or a working Manager GUI installation.
 
-Registry publishing has not run. The current Chrome GitHub OAuth screen identifies DieselNiu, not the authorized NotUsingGithub account. No authorization was granted to that account. Sign in to Registry with NotUsingGithub before proceeding.
+Registry publishing has not run. The user signed in with NotUsingGithub in a Chrome incognito window. Publisher `notusinggithub` (display name Wan27) was created and verified at https://registry.comfy.org/zh/publishers/notusinggithub. The actual PublisherId is now committed. Publishing-key creation and repository-secret configuration await the specific access confirmation.
 
 ## Complete after login
 

@@ -13,4 +13,4 @@ Documentation = "https://wan2-7.io/mcp/guide/"
 
 [tool.comfy]
 DisplayName = "Wan27"
-# PublisherId must be copied from the verified NotUsingGithub Registry publisher.
+PublisherId = "notusinggithub"
