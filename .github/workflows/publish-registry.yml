@@ -1,0 +1,52 @@
+name: Prepare or publish Comfy Registry
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish after the Registry publisher and repository secret are configured
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: comfy-registry-publish
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -v
+      - name: Validate metadata and publishing prerequisites
+        env:
+          PUBLISH_REQUESTED: ${{ inputs.publish }}
+        run: |
+          python - <<'PYTHON'
+          import os, pathlib, tomllib
+          root = pathlib.Path('.')
+          data = tomllib.loads((root / 'pyproject.toml').read_text())
+          assert data['project']['name'] == 'comfyui-wan27'
+          assert data['tool']['comfy']['DisplayName'] == 'Wan27'
+          assert (root / 'LICENSE').is_file()
+          if os.environ['PUBLISH_REQUESTED'] == 'true':
+              assert data['tool']['comfy'].get('PublisherId'), 'Missing verified Registry PublisherId'
+          print('Metadata valid; publishing requested:', os.environ['PUBLISH_REQUESTED'])
+          PYTHON
+  publish:
+    if: inputs.publish && github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Require Registry publishing secret
+        env:
+          REGISTRY_ACCESS_TOKEN: ${{ secrets.REGISTRY_ACCESS_TOKEN }}
+        run: test -n "$REGISTRY_ACCESS_TOKEN"
+      - name: Publish using official Comfy action
+        uses: Comfy-Org/publish-node-action@d2366e7abb6ab16f3bb03e3520ae25c8cf749bc9
+        with:
+          skip_checkout: 'true'
+          personal_access_token: ${{ secrets.REGISTRY_ACCESS_TOKEN }}
