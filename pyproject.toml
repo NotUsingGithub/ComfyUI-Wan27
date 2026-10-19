@@ -1,0 +1,12 @@
+[project]
+name = "comfyui-wan27"
+version = "0.1.0"
+description = "ComfyUI nodes for Wan27 model discovery, credit estimates, explicitly approved generation and task tracking"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/NotUsingGithub/ComfyUI-Wan27"
+Homepage = "https://wan2-7.io/"
+Documentation = "https://wan2-7.io/mcp/guide/"
